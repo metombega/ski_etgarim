@@ -7,7 +7,7 @@ workers_experties = {
     'Alice': ['a', 'b', 'c'], 
     'Bob': ['c', 'b'], 
     'Charlie': ['a', 'b', 'd'], 
-    'David': ['b', 'c'], 
+    'David': ['b', 'c', 'e'], 
     'Eve': ['a', 'b', 'c', 'd'], 
     'Frank': ['a', 'b', 'c', 'd'], 
     'Grace': ['d', 'b'], 
@@ -30,7 +30,7 @@ workers_max_work_days = {
     'Alice': 3, 
     'Bob': 2, 
     'Charlie': 3, 
-    'David': 5, 
+    'David': 4, 
     'Eve': 4, 
     'Frank': 1, 
     'Grace': 4, 
@@ -38,7 +38,7 @@ workers_max_work_days = {
     'Ivan': 2
 }
 
-mandatory_experties = {'a': 1, 'b': 2, 'c': 1, 'd': 0} # maybe should change according to the date
+mandatory_experties = {'a': 1, 'b': 2, 'c': 1, 'd': 0, 'e': 1} # maybe should change according to the date
 num_of_workers_per_day = 5
 
 def schedual_workers():
@@ -107,6 +107,7 @@ def schedual_workers():
                     break
             if is_replacable:
                 schedual[date]['replacble_workers'].append(worker)
+    return schedual
 
 if __name__ == '__main__':
     schedual_workers()
