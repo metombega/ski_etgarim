@@ -13,14 +13,14 @@ class WorkersSchedual:
     # TODO:
     def add_worker_to_schedual(self, worker, date, experties_to_book, num_of_workers_booked, available_workers_sorted, workers_with_experty, schedual):
         available_workers_sorted.remove(worker)
-        workers_with_experty.remove(worker)
         self.workers_max_work_days[worker] -= 1
         # remove all the required experties on this date
         for worker_experty in self.workers_experties[worker]:
             experties_to_book[worker_experty] -= 1
         num_of_workers_booked -= 1
         schedual[date]['workers'].append(worker)
-        
+        return num_of_workers_booked
+
     def create_schedual(self):
         """ 
         sort the dates by the number of workers that can work on this date - we want to take first the dates with the least workers
@@ -43,16 +43,8 @@ class WorkersSchedual:
                 while experties_to_book[experty] > 0:
                     if len(workers_with_experty) > 0:
                         worker = workers_with_experty[0]
-                        # self.add_worker_to_schedual(worker, date, experties_to_book, num_of_workers_booked, available_workers_sorted, workers_with_experty, schedual)
-                        available_workers_sorted.remove(worker)
+                        num_of_workers_booked = self.add_worker_to_schedual(worker, date, experties_to_book, num_of_workers_booked, available_workers_sorted, workers_with_experty, schedual)
                         workers_with_experty.remove(worker)
-                        self.workers_max_work_days[worker] -= 1
-                        # remove all the required experties on this date
-                        for worker_experty in self.workers_experties[worker]:
-                            experties_to_book[worker_experty] -= 1
-                        num_of_workers_booked -= 1
-                        schedual[date]['workers'].append(worker)
-                        print(worker, date)
                     else: 
                         print(f'no more workers with experty {experty} on date {date}')
                         break
@@ -62,14 +54,7 @@ class WorkersSchedual:
             # todo: take workers with the least experties
             while num_of_workers_booked > experties_not_booked:
                 for worker in available_workers_sorted:
-                    available_workers_sorted.remove(worker)
-                    self.workers_max_work_days[worker] -= 1
-                    # remove all the required experties on this date
-                    for worker_experty in self.workers_experties[worker]:
-                        experties_to_book[worker_experty] -= 1
-                    num_of_workers_booked -= 1
-                    schedual[date]['workers'].append(worker)
-                    print(worker, date)
+                    num_of_workers_booked = self.add_worker_to_schedual(worker, date, experties_to_book, num_of_workers_booked, available_workers_sorted, workers_with_experty, schedual)
 
             # remove the date from the availability
             for worker in self.workers:
