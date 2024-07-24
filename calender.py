@@ -107,8 +107,29 @@ def schedual_workers():
                     break
             if is_replacable:
                 schedual[date]['replacble_workers'].append(worker)
+        schedual[date]['experties'] = experties_to_book
     return schedual
 
+def replace_workers(worker1, date1, worker2, date2, schedual):
+    """ replace worker1 with worker2 in the schedual """
+    # check if the worker1 is in the schedual
+    if worker1 in schedual[date1]['workers'] and worker2 in schedual[date2]['workers']:
+        schedual[date1]['workers'].remove(worker1)
+        schedual[date2]['workers'].append(worker2)
+        # update the experties
+        for experty in schedual[date1]['experties']:
+            if experty in workers_experties[worker1]:
+                schedual[date1]['experties'][experty] += 1
+            if experty in workers_experties[worker2]:
+                schedual[date1]['experties'][experty] -= 1
+        for experty in schedual[date2]['experties']:
+            if experty in workers_experties[worker2]:
+                schedual[date2]['experties'][experty] += 1
+            if experty in workers_experties[worker1]:
+                schedual[date2]['experties'][experty] -= 1
+    else:
+        print(f'worker {worker1} is not in the schedual on date {date1} or worker {worker2} is not in the schedual on date {date2}')
+        
 if __name__ == '__main__':
     schedual_workers()
 
